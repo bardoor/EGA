@@ -1,6 +1,3 @@
-import telebot
-from telebot import types
-
 bot = telebot.TeleBot('6883397009:AAE_zS_E1I8iTMuwu1AkHKXQMywJV-mZeQ0')
 
 
@@ -18,8 +15,9 @@ def helpCommand(message):
                                       f'/help - помощь по боту\n'
                                       f'/spheres - сферы, с которыми работает бот\n\n'
                                       f'<b>ИНСТРУКЦИЯ ПО ИСПОЛЬЗОВАНИЮ DVORA:</b>\n'
-                                      f'1) Введите свой социальный вопрос, с которым вам нужно помочь.\n'
-                                      f'2) Dvora бот самостоятельно определит сферу и тему вашего обращения.\n'
+                                      f'1) Введите свой социальный вопрос, с которым вам нужно помочь.'
+                                      f'**Для более точного определения проблемы укажите ваш <b>город</b> и <b>адрес</b>(при необходимости)**\n\n'
+                                      f'2) Dvora бот самостоятельно определит сферу и тему вашего обращения.\n\n'
                                       f'3) Далее, Drova отправит запрос в отделение, ответственное за решение данного вопроса.', parse_mode='HTML')
 
 
@@ -33,7 +31,6 @@ def spheresCommand(message):
                                       f'<em>Государственная собственность</em>\n'
                                       f'<em>Дороги</em>\n'
                                       f'<em>ЖКХ</em>\n'
-                                      f'<em>Здравоохранение/Медицина</em>\n'
                                       f'<em>Здравоохранение/Медицина</em>\n'
                                       f'<em>Коронавирус</em>\n'
                                       f'<em>Культура</em>\n'
@@ -57,8 +54,9 @@ def spheresCommand(message):
 
 
 @bot.message_handler()
-def answerHello(message):
-        bot.reply_to(message, f'Привет, {message.from_user.first_name}')
+def answerQuestion(message):
+    bot.send_message(message.chat.id, 'Подождите пожалуйста, ваш запрос обрабатывается...')
+
 
 
 
