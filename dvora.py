@@ -5,6 +5,10 @@ from torch import nn
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
+import stanza
+stanza.download('ru')
+nlp = stanza.Pipeline('ru')
+
 import pandas as pd
 
 train_df = pd.read_csv("aug.csv")
@@ -135,3 +139,36 @@ class DvoraClassifier:
             result.append((group_theme, theme))
 
         return result
+
+
+def _location(sentences):
+    result = []
+
+    if isinstance(sentences, str):
+        sentences = [sentences]
+
+    for sentence in sentences:
+        found_locations = []
+        doc = nlp(sentence)
+        for el in doc.sentences:
+            for ent in el.entities:
+                if ent.type in 'LOC':
+                    found_locations.append(ent.text)
+    return result
+
+
+_classifier = DvoraClassifier()
+
+
+def dvora(sentences):
+    themes = _classifier(sentences)
+    locations = _location(sentences)
+
+    info = []
+    for i, th in enumerate(themes):
+        loc = None
+        if i < len(locations):
+            loc = locations[i]
+        info.append({"loc": loc, "group_theme": th[0], "theme": th[1]})
+
+    return info
